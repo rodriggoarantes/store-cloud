@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>
+                %black(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C{1.}) :: %msg%n%throwable
+            </pattern>
+        </encoder>
+    </appender>
+    <appender name="PAPERTRAIL" class="ch.qos.logback.classic.net.SyslogAppender">
+        <syslogHost>logs3.papertrailapp.com</syslogHost>
+        <port>36486</port>
+        <facility>USER</facility>
+        <suffixPattern>loja: %logger %msg</suffixPattern>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="PAPERTRAIL"/>
+    </root>
+</configuration>

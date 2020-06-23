@@ -34,12 +34,14 @@ public class CompraServiceImpl implements CompraService {
         Validate.notNull(compra.getEndereco(), "Endereço da compra é obrigatório");
         Validate.notBlank(compra.getEndereco().getEstado(), "Estado é obrigatório");
 
+        LOG.info("Buscando fornecedor: {}", compra.getEndereco().getEstado());
         final Optional<FornecedorDto> fornecedorDto = Optional.ofNullable(fornecedorClient.obterPorEstado(
                 compra.getEndereco().getEstado()));
 
         fornecedorDto.orElseThrow(() -> new BusinessException(
                 "FOR500", "Nenhum fornecedor encontrado para região", HttpStatus.BAD_REQUEST_400));
 
+        LOG.info("Gerando pedido com fornecedor: {}", fornecedorDto.get().getId());
         final PedidoDto pedido = fornecedorClient.realizarPedido(compra.getItens());
 
         LOG.info("Fornecedor devolvido: {} | {}", fornecedorDto.get().getId(), fornecedorDto.get().getEndereco());

@@ -6,7 +6,11 @@ import com.ras.fornecedor.domain.pedido.PedidoItem;
 import com.ras.fornecedor.domain.pedido.PedidoRepository;
 import com.ras.fornecedor.domain.produto.Produto;
 import com.ras.fornecedor.domain.produto.ProdutoRepository;
+import org.apache.commons.lang3.Validate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +18,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class PedidoService {
+	private static final Logger LOG = LoggerFactory.getLogger(PedidoService.class);
 	
 	@Autowired
 	private PedidoRepository pedidoRepository;
@@ -21,14 +26,12 @@ public class PedidoService {
 	@Autowired
 	private ProdutoRepository produtoRepository;
 
-	public Pedido realizaPedido(List<ItemDoPedidoDto> itens) {
-		
-		if(itens == null) {
-			return null;
-		}
-		
-		List<PedidoItem> pedidoItens = toPedidoItem(itens);
-		Pedido pedido = new Pedido(pedidoItens);
+	public Pedido realizaPedido(@NonNull List<ItemDoPedidoDto> itens) {
+		Validate.notNull(itens, "Lista de itens é obrigatória");
+		LOG.info("Gerando pedido ao fornecedor itens: {}", itens.size());
+
+		final List<PedidoItem> pedidoItens = toPedidoItem(itens);
+		final Pedido pedido = new Pedido(pedidoItens);
 		pedido.setTempoDePreparo(itens.size());
 		return pedidoRepository.save(pedido);
 	}
