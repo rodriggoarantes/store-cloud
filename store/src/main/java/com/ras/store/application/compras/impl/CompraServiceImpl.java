@@ -3,7 +3,7 @@ package com.ras.store.application.compras.impl;
 import com.ras.store.api.dto.CompraDto;
 import com.ras.store.api.dto.FornecedorDto;
 import com.ras.store.application.compras.CompraService;
-import com.ras.store.application.fornecedor.FornecedorService;
+import com.ras.store.application.fornecedor.FornecedorClient;
 import com.ras.store.infra.exception.BusinessException;
 import org.apache.commons.lang3.Validate;
 import org.eclipse.jetty.http.HttpStatus;
@@ -19,11 +19,11 @@ public class CompraServiceImpl implements CompraService {
 
     private static final Logger LOG = LoggerFactory.getLogger(CompraServiceImpl.class);
 
-    private final FornecedorService fornecedorService;
+    private final FornecedorClient fornecedorClient;
 
     @Autowired
-    public CompraServiceImpl(FornecedorService fornecedorService) {
-        this.fornecedorService = fornecedorService;
+    public CompraServiceImpl(FornecedorClient fornecedorClient) {
+        this.fornecedorClient = fornecedorClient;
     }
 
     @Override
@@ -33,8 +33,8 @@ public class CompraServiceImpl implements CompraService {
         Validate.notNull(compra.getEndereco(), "Endereço da compra é obrigatório");
         Validate.notBlank(compra.getEndereco().getEstado(), "Estado é obrigatório");
 
-        final Optional<FornecedorDto> fornecedorDto = fornecedorService.obterFornecedor(
-                compra.getEndereco().getEstado());
+        final Optional<FornecedorDto> fornecedorDto = Optional.ofNullable(fornecedorClient.obterPorEstado(
+                compra.getEndereco().getEstado()));
 
         fornecedorDto.orElseThrow(() -> new BusinessException(
                 "FOR500", "Nenhum fornecedor encontrado para região", HttpStatus.BAD_REQUEST_400));
