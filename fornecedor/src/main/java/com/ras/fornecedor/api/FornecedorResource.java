@@ -1,8 +1,7 @@
 package com.ras.fornecedor.api;
 
+import com.ras.fornecedor.application.FornecedorService;
 import com.ras.fornecedor.domain.fornecedor.Fornecedor;
-import com.ras.fornecedor.domain.fornecedor.FornecedorRepository;
-import com.ras.store.infra.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,26 +16,25 @@ import org.springframework.web.bind.annotation.RestController;
 public class FornecedorResource {
 
     @Autowired
-    private FornecedorRepository repository;
+    private FornecedorService service;
 
     @GetMapping
     public Iterable<Fornecedor> listar() {
-        return repository.findAll();
+        return service.listar();
     }
 
     @GetMapping("/{id}")
-    public Fornecedor obter(@PathVariable Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Fornecedor nao encontrado"));
+    public Fornecedor obter(@NonNull @PathVariable Long id) {
+        return service.obter(id);
     }
 
     @GetMapping("/states/{state}")
     public Fornecedor obterPorEstado(@PathVariable String state) {
-        return repository.findFirstByEstadoIgnoreCase(state);
+        return service.findByEstado(state);
     }
 
     @PostMapping()
-    public Fornecedor save(@RequestBody @NonNull Fornecedor param) {
-        return repository.save(param);
+    public Fornecedor salvar(@RequestBody @NonNull Fornecedor param) {
+        return service.salvar(param);
     }
 }
