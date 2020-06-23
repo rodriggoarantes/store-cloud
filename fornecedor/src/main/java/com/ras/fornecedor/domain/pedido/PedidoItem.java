@@ -18,7 +18,8 @@ public class PedidoItem {
 	
 	private Integer quantidade;
 	
-	@ManyToOne @JoinColumn(name = "produtoId")
+	@ManyToOne
+	@JoinColumn(name = "produtoId")
 	private Produto produto;
 
 	public Long getId() {

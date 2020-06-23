@@ -20,8 +20,8 @@ public class PedidoResource {
 	private PedidoService pedidoService;
 	
 	@RequestMapping(method = RequestMethod.POST)
-	public Pedido realizaPedido(@RequestBody List<ItemDoPedidoDto> produtos) {
-		return pedidoService.realizaPedido(produtos);
+	public Pedido realizaPedido(@RequestBody List<ItemDoPedidoDto> itens) {
+		return pedidoService.realizaPedido(itens);
 	}
 	
 	@RequestMapping("/{id}")

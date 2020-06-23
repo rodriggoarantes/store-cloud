@@ -1,4 +1,4 @@
-package com.ras.store.api.dto;
+package com.ras.fornecedor.api.dto;
 
 public class FornecedorDto {
     private Long id;
@@ -28,4 +28,5 @@ public class FornecedorDto {
     public void setEstado(String estado) {
         this.estado = estado;
     }
+
 }

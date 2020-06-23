@@ -2,11 +2,11 @@ package com.ras.store.api.dto;
 
 import java.util.List;
 
-public class CompraDto {
+public class PedidoDto {
 
     private Long id;
-    private Long loja;
-    private EnderecoDto endereco;
+    private Long tempoDePreparo;
+    private String status;
     private List<ItemDto> itens;
 
     public Long getId() {
@@ -17,20 +17,20 @@ public class CompraDto {
         this.id = id;
     }
 
-    public Long getLoja() {
-        return loja;
+    public Long getTempoDePreparo() {
+        return tempoDePreparo;
     }
 
-    public void setLoja(Long loja) {
-        this.loja = loja;
+    public void setTempoDePreparo(Long tempoDePreparo) {
+        this.tempoDePreparo = tempoDePreparo;
     }
 
-    public EnderecoDto getEndereco() {
-        return endereco;
+    public String getStatus() {
+        return status;
     }
 
-    public void setEndereco(EnderecoDto endereco) {
-        this.endereco = endereco;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public List<ItemDto> getItens() {

@@ -25,8 +25,7 @@ public class CompraResource {
     }
 
     @PostMapping()
-    public ResponseEntity<String> order(@RequestBody @NonNull CompraDto compra) {
-        compraService.realizarCompra(compra);
-        return new ResponseEntity<>("Compra Realizada", HttpStatus.OK);
+    public CompraDto order(@RequestBody @NonNull CompraDto compra) {
+        return compraService.realizarCompra(compra);
     }
 }
