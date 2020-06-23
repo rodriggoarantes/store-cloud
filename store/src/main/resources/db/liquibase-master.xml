@@ -5,8 +5,5 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
 
     <include relativeToChangelogFile="true" file="liquibase-usuario.xml" />
-    <include relativeToChangelogFile="true" file="liquibase-pais.xml" />
-    <include relativeToChangelogFile="true" file="liquibase-estado.xml" />
-    <include relativeToChangelogFile="true" file="liquibase-cidade.xml" />
-    <include relativeToChangelogFile="true" file="liquibase-endereco.xml" />
+    <include relativeToChangelogFile="true" file="liquibase-loja.xml" />
 </databaseChangeLog>
