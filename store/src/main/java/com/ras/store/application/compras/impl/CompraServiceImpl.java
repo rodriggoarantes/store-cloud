@@ -1,13 +1,15 @@
 package com.ras.store.application.compras.impl;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.ras.store.api.dto.CompraDto;
+import com.ras.store.api.dto.EnderecoDto;
 import com.ras.store.api.dto.FornecedorDto;
 import com.ras.store.api.dto.PedidoDto;
 import com.ras.store.application.compras.CompraService;
 import com.ras.store.application.fornecedor.FornecedorClient;
 import com.ras.store.infra.exception.BusinessException;
 import org.apache.commons.lang3.Validate;
-import org.eclipse.jetty.http.HttpStatus;
+import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,7 @@ public class CompraServiceImpl implements CompraService {
         this.fornecedorClient = fornecedorClient;
     }
 
+    @HystrixCommand(fallbackMethod = "realizarCompraFallback")
     @Override
     public CompraDto realizarCompra(CompraDto compra) {
         Validate.notNull(compra, "Dados da compra de ver informado");
@@ -39,7 +42,7 @@ public class CompraServiceImpl implements CompraService {
                 compra.getEndereco().getEstado()));
 
         fornecedorDto.orElseThrow(() -> new BusinessException(
-                "FOR500", "Nenhum fornecedor encontrado para região", HttpStatus.BAD_REQUEST_400));
+                "FOR500", "Nenhum fornecedor encontrado para região", HttpStatus.BAD_REQUEST.value()));
 
         LOG.info("Gerando pedido com fornecedor: {}", fornecedorDto.get().getId());
         final PedidoDto pedido = fornecedorClient.realizarPedido(compra.getItens());
@@ -53,6 +56,14 @@ public class CompraServiceImpl implements CompraService {
         pedidoCompra.setItens(pedido.getItens());
         pedidoCompra.setLoja(1L);
 
+        return pedidoCompra;
+    }
+
+    private CompraDto realizarCompraFallback(CompraDto compra) {
+        final CompraDto pedidoCompra = new CompraDto();
+        pedidoCompra.setId(0L);
+        pedidoCompra.setEndereco(new EnderecoDto());
+        pedidoCompra.setLoja(0L);
         return pedidoCompra;
     }
 }
