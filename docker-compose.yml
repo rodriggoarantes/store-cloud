@@ -1,0 +1,36 @@
+version: '3'
+services:
+
+  db:
+    image: postgres:11-alpine
+    container_name: store-postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "rodrigo010"
+      POSTGRES_DB: "stores"
+    ports:
+      - "5432:5432"
+    expose:
+      - 5432
+    networks:
+      - backend
+
+  api:
+    container_name: store-api
+    build: .
+    image: "rodriggoarantes/store-api:latest"
+    ports:
+      - "8080:8383"
+      - "5005:5005"
+    depends_on:
+      - db
+    networks:
+      - backend
+
+networks:
+  backend:
+
+volumes:
+  db-data:
